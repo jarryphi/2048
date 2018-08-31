@@ -1,7 +1,5 @@
-import font
 import pygame
 from pygame.locals import *
-from font import text_to_screen
 
 class visualization():
     def __init__(self, grid):
@@ -11,7 +9,7 @@ class visualization():
         pygame.display.set_caption('2048')
         self.screen = pygame.display.set_mode((self.screenwidth, self.screenheight))    
         self.screen.fill((209,238,238))
-        text_to_screen(self.screen, 'Score:' , 100, 440, 30, (0,0,0))
+        self.text_to_screen(self.screen, 'Score:' , 100, 440, 30, (0,0,0))
         pygame.font.init()
         self.printgrid(grid)
         pygame.display.update()
@@ -25,7 +23,7 @@ class visualization():
                 posx += 10
                 posy +=30
                 if score != 0:
-                    text_to_screen(self.screen, score , posx, posy, 30, (255,255,255))
+                    self.text_to_screen(self.screen, score , posx, posy, 30, (255,255,255))
                 posx += 90
                 posy -= 30
             posx = 10
@@ -38,3 +36,8 @@ class visualization():
             color = (98, 0, 0)    
         self.screen.fill(color,pygame.draw.rect(self.screen,(0,0,0), (posx,posy,100,100), 4))
         pygame.draw.rect(self.screen,(0,0,0), (posx,posy,100,100), 4)
+    def text_to_screen(self,screen, text, x, y, size = 50,color = (255, 255, 255)):
+        text = str(text)
+        font = pygame.font.SysFont('Comic Sans Ms', 30)
+        text = font.render(text, True, color)
+        screen.blit(text, (x, y))

@@ -34,8 +34,6 @@ class gamemanagement():
         return self.calculatereward()
     def checkloss(self):
         lost = 0
-        if (self.changedcounter == 10):
-            lost = 1
         if (np.count_nonzero(self.grid) == 16):
             lost = max(lost, self.grid.losshandler(K_LEFT))
             lost = max(lost, self.grid.losshandler(K_RIGHT))
@@ -45,6 +43,15 @@ class gamemanagement():
             return True
         else:
             return False
+    def checklossbychangedcounter(self):
+        lost = 0
+        if (self.changedcounter == 10):
+            lost = 1
+        if lost:
+            return True
+        else:
+            return False
+        
     def getgrid(self):
         return self.grid.grid
     

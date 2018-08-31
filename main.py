@@ -17,7 +17,7 @@ def main():
                 sys.exit()
             if event.type == KEYDOWN and (event.key == K_UP or event.key == K_DOWN or event.key == K_LEFT or event.key == K_RIGHT) :
                 game.takeinput(event.key)
-            if(game.checkloss()):
+            if(game.checkloss() or game.checklossbychangedcounter):
                 pygame.quit()
                 sys.exit
 if __name__ == '__main__':
