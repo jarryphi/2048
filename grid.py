@@ -10,30 +10,21 @@ pygame.init()
 class grid():
     
     def __init__(self):
-        self.gridoccupied = np.zeros((4,4))
         self.grid = np.zeros((4,4))
         self.changed = 1;
         self.reward = 0
         for i in range(0,2):
             pos = self.generaterand()
             rand = np.random.choice([2,4])
-            if not self.gridoccupied[pos[0],pos[1]]:
-                self.grid[pos[0]][pos[1]] = rand
-                self.gridoccupied[pos[0]][pos[1]] = 1         
+            self.grid[pos[0]][pos[1]] = rand         
     def addrand(self):
         pos = self.generaterand()
-        if self.gridoccupied[pos[0],pos[1]]==1:
-            self.addrand()
-        else:
-            self.grid[pos[0]][pos[1]] = 2
-            self.gridoccupied[pos[0]][pos[1]] = 1
+        self.grid[pos[0]][pos[1]] = 2
       
     def generaterand(self):
-        
-        randx = random.randint(0,3)
-        randy = random.randint(0,3)
-        rand = np.array([randx, randy])
-     
+        i , j = np.where(self.grid == 0)
+        index = random.randint(0,np.size(i)-1)
+        rand = np.array([i[index], j[index]])
         return rand
         
     def checkchanged(self):
@@ -71,8 +62,6 @@ class grid():
                 if (np.array_equal(refline,line) == False):
                     self.changed = 1                
                 self.grid[i,:] = line
-                line[line > 0] = 1
-                self.gridoccupied[i,:] = line
 
         else:
             for i in range(0,4):
@@ -86,8 +75,6 @@ class grid():
                 if (np.array_equal(refrow,row) == False):
                     self.changed = 1
                 self.grid[:,i] = row
-                row[row > 0] = 1
-                self.gridoccupied[:,i] = row
         if(self.changed):
             self.addrand()
     def summelements(self, arr):

@@ -69,7 +69,7 @@ class gamemanagement():
             self.iteration_counter = 1
             return actual_reward
         else:
-            self.filled_before = np.sum(self.grid.gridoccupied)
+            self.filled_before = np.count_nonzero(self.grid.grid)
             self.iteration_counter +=1
             if(self.grid.checkchanged() == False):    
                 return -2
