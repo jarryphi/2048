@@ -18,18 +18,18 @@ class Player():
                     sys.exit()
                 if event.type == KEYDOWN and (event.key == K_UP or event.key == K_DOWN or event.key == K_LEFT or event.key == K_RIGHT) :
                     self.game.setinput(event.key)
-                    #weights1 = np.random.rand(16,1)
-                    #weights2 = np.random.rand(1,3)
-                    #weights3 = np.random.rand(3,4)
-                    #self.NN.setweights(weights1, weights2, weights3)
-                    #w1,w2,w3 = self.NN.getweights()
-                        
-                    #action, _ = neuronalnet.predict(game.getgrid())
-                    #game.takeinput(action)
                     self.lost, grid, reward = self.game.getoutput(0)
                 if(self.lost):
-                    print("lost")
-                    print(self.game.getgrid())
                     pygame.quit()
                     sys.exit()
                     return True
+    def neuronplay(self):
+        while True:
+            action, _ = self.NN.predict(self.game.getgrid())
+            self.game.setinput(action)
+            self.lost, grid, reward = self.game.getoutput(100)
+            if(self.lost):
+                pygame.quit()
+                sys.exit()
+                return True
+            

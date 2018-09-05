@@ -13,6 +13,7 @@ class grid():
         self.grid = np.zeros((4,4))
         self.changed = 1;
         self.reward = 0
+        self.indrow, self.indcolumn = np.where(self.grid == 0)
         for i in range(0,2):
             pos = self.generaterand()
             rand = np.random.choice([2,4])
@@ -22,9 +23,8 @@ class grid():
         self.grid[pos[0]][pos[1]] = 2
       
     def generaterand(self):
-        i , j = np.where(self.grid == 0)
-        index = random.randint(0,np.size(i)-1)
-        rand = np.array([i[index], j[index]])
+        index = random.randint(0,np.size(self.indrow)-1)
+        rand = np.array([self.indrow[index], self.indcolumn[index]])
         return rand
         
     def checkchanged(self):
@@ -50,31 +50,45 @@ class grid():
         
     def keyevent(self,key):
         self.changed = 0;
+        self.indrow = []
+        self.indcolumn = []
         if (key == K_RIGHT or key == K_LEFT):
             for i in range(0,4):
-                line = self.grid[i,:]
-                refline = line
-                line = self.shrinkline(line)
+                row = self.grid[i,:]
+                refrow = row
+                row = self.shrinkline(row)
                 if(key == K_RIGHT):
-                    line = np.pad(line,(4-np.size(line),0),'constant', constant_values = 0)
+                    for j in range(0,4-np.size(row)):
+                        self.indrow.append(i)
+                        self.indcolumn.append(j)
+                    row = np.pad(row,(4-np.size(row),0),'constant', constant_values = 0)
                 else:
-                    line = np.pad(line,(0,4-np.size(line)),'constant', constant_values = 0)
-                if (np.array_equal(refline,line) == False):
+                    for j in range(0,4-np.size(row)):
+                        self.indrow.append(i)
+                        self.indcolumn.append(np.size(row)+j)
+                    row = np.pad(row,(0,4-np.size(row)),'constant', constant_values = 0)                    
+                if (np.array_equal(refrow,row) == False):
                     self.changed = 1                
-                self.grid[i,:] = line
+                self.grid[i,:] = row
 
         else:
             for i in range(0,4):
-                row = self.grid[:,i]
-                refrow = row
-                row = self.shrinkline(row)
+                column = self.grid[:,i]
+                refcolumn = column
+                column = self.shrinkline(column)
                 if(key == K_UP):
-                    row = np.pad(row,(0,4-np.size(row)),'constant', constant_values = 0)
+                    for j in range(0,4-np.size(column)):
+                        self.indrow.append(np.size(column)+j)
+                        self.indcolumn.append(i)
+                    column = np.pad(column,(0,4-np.size(column)),'constant', constant_values = 0)
                 else:
-                    row = np.pad(row,(4-np.size(row),0),'constant', constant_values = 0)
-                if (np.array_equal(refrow,row) == False):
+                    for j in range(0,4-np.size(column)):
+                        self.indrow.append(j)
+                        self.indcolumn.append(i)
+                    column = np.pad(column,(4-np.size(column),0),'constant', constant_values = 0)
+                if (np.array_equal(refcolumn,column) == False):
                     self.changed = 1
-                self.grid[:,i] = row
+                self.grid[:,i] = column
         if(self.changed):
             self.addrand()
     def summelements(self, arr):
